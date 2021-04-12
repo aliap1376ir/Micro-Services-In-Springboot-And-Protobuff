@@ -34,7 +34,7 @@ public class Controller {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @GetMapping(path = "/books")
+    @GetMapping(path = "/api/books")
     private void init() {
         newData("شاهزاده کوچولو", 1);
         newData("رمان۱", 2);
@@ -48,13 +48,13 @@ public class Controller {
     }
 
 
-    @PostMapping(path = "/books/new/json")
+    @PostMapping(path = "/api/books/new/json")
     private Book newBookJson(@RequestBody Book bookJson) {
         bookJson = bookRepository.save(bookJson);
         return bookJson;
     }
 
-    @PostMapping(path = "/books/new/proto")
+    @PostMapping(path = "/api/books/new/proto")
     private Models.Book newBookProto(@RequestBody Models.Book bookProto) {
 
         Book bookJson = new Book();
@@ -64,7 +64,7 @@ public class Controller {
 
         bookJson = bookRepository.save(bookJson);
 
-        Models.Category categoryProto = restTemplate.getForObject("http://categories/categories/categories/findById?id=" + bookJson.getCategoryId(), Models.Category.class);
+        Models.Category categoryProto = restTemplate.getForObject("http://categories/api/categories/categories/findById?id=" + bookJson.getCategoryId(), Models.Category.class);
 
         bookProto = Models.Book.newBuilder()
                 .setId(bookJson.getId())
@@ -76,7 +76,7 @@ public class Controller {
     }
 
 
-    @GetMapping(path = "/books/all/json")
+    @GetMapping(path = "/api/books/all/json")
     private ArrayList<Book> getAllCategoriesJson() {
         ArrayList<Book> books = bookRepository.findAll();
 
@@ -120,14 +120,14 @@ public class Controller {
         return books;
     }
 
-    @GetMapping(path = "/books/all/proto")
+    @GetMapping(path = "/api/books/all/proto")
     private Models.Books getAllBooksProto() {
         Models.Books booksProto = Models.Books.newBuilder().build();
 
         ArrayList<Book> booksJson = bookRepository.findAll();
         for (Book bookJson : booksJson) {
 
-            Models.Category categoryProto = restTemplate.getForObject("http://categories/categories/categories/findById?id=" + bookJson.getCategoryId(), Models.Category.class);
+            Models.Category categoryProto = restTemplate.getForObject("http://categories/api/categories/categories/findById?id=" + bookJson.getCategoryId(), Models.Category.class);
 
             if (categoryProto != null) {
 

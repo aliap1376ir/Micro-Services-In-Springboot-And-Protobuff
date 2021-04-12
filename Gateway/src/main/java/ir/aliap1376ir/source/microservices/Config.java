@@ -12,10 +12,10 @@ public class Config {
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(r ->
-                        r.path("/categories/**")
+                        r.path("/api/categories/**")
                                 .uri("lb://CATEGORIES").id("CATEGORIES"))
                 .route(r ->
-                        r.path("/books/**")
+                        r.path("/api/books/**")
                                 .uri("lb://BOOKS").id("BOOKS"))
                 .build();
     }

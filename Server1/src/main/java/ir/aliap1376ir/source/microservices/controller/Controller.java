@@ -14,7 +14,7 @@ public class Controller {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping(path = "/categories")
+    @GetMapping(path = "/api/categories")
     private void init() {
         newData("رمان");
         newData("داستان");
@@ -28,13 +28,13 @@ public class Controller {
         categoryRepository.save(category);
     }
 
-    @PostMapping(path = "/categories/new/json")
+    @PostMapping(path = "/api/categories/new/json")
     private Category newCategoryJson(@RequestBody Category categoryJson) {
         categoryJson = categoryRepository.save(categoryJson);
         return categoryJson;
     }
 
-    @PostMapping(path = "/categories/new/proto")
+    @PostMapping(path = "/api/categories/new/proto")
     private Models.Category newCategoryProto(@RequestBody Models.Category categoryProto) {
 
         Category categoryJson = new Category();
@@ -52,14 +52,14 @@ public class Controller {
     }
 
 
-    @GetMapping(path = "/categories/all/json")
+    @GetMapping(path = "/api/categories/all/json")
     private ArrayList<Category> getAllCategoriesJson() {
         ArrayList<Category> categoriesJson = categoryRepository.findAll();
 
         return categoriesJson;
     }
 
-    @GetMapping(path = "/categories/all/proto")
+    @GetMapping(path = "/api/categories/all/proto")
     private Models.Categories getAllCategoriesProto() {
         Models.Categories categoriesProto = Models.Categories.newBuilder().build();
 
@@ -77,7 +77,7 @@ public class Controller {
         return categoriesProto;
     }
 
-    @GetMapping(path = "/categories/categories/findById")
+    @GetMapping(path = "/api/categories/categories/findById")
     private Models.Category findCategoryById(@RequestParam long id){
 
         Category categoryJson = categoryRepository.findById(id);
