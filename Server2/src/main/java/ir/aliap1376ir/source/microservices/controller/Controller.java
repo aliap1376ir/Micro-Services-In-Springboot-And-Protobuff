@@ -4,12 +4,13 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.stub.ClientCallStreamObserver;
 import ir.aliap1376ir.source.microservices.models.db.Book;
 import ir.aliap1376ir.source.microservices.models.db.BookRepository;
 import ir.aliap1376ir.source.microservices.models.db.Category;
 import ir.aliap1376ir.source.microservices.models.transfer.CategoryServiceGrpc;
 import ir.aliap1376ir.source.microservices.models.transfer.Models;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 @RestController
@@ -31,6 +31,8 @@ public class Controller {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping(path = "/books")
     private void init() {
@@ -93,18 +95,17 @@ public class Controller {
 
 
             final InstanceInfo instanceInfo = client.getNextServerFromEureka("categories", false);
-            System.out.println(instanceInfo.getIPAddr() + ":" + instanceInfo.getPort());
-            final ManagedChannel channel = ManagedChannelBuilder.forAddress(instanceInfo.getIPAddr(), instanceInfo.getPort()+1)
-//            final ManagedChannel channel = ManagedChannelBuilder.forAddress(instanceInfo.getIPAddr(), 6565)
+            logger.info(instanceInfo.getIPAddr() + ":" + (instanceInfo.getPort()+1));
+            final ManagedChannel channel = ManagedChannelBuilder.forAddress(instanceInfo.getIPAddr(), instanceInfo.getPort() + 1)
                     .usePlaintext()
                     .build();
             final CategoryServiceGrpc.CategoryServiceBlockingStub blockingStub = CategoryServiceGrpc.newBlockingStub(channel);
 
             Models.RequestParam request = Models.RequestParam.newBuilder().setId(bookJson.getCategoryId()).build();
 
-            Models.Category categoryProto =blockingStub.findById(request);
+            Models.Category categoryProto = blockingStub.findById(request);
 
-           if(categoryProto != null){
+            if (categoryProto != null) {
                 Category categoryJson = new Category();
                 categoryJson.setId(categoryProto.getId());
                 categoryJson.setName(categoryProto.getName());

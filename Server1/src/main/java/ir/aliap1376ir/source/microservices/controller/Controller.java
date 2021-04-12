@@ -14,7 +14,6 @@ public class Controller {
     @Autowired
     private CategoryRepository categoryRepository;
 
-
     @GetMapping(path = "/categories")
     private void init() {
         newData("رمان");

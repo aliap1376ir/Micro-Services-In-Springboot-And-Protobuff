@@ -6,6 +6,8 @@ import ir.aliap1376ir.source.microservices.models.db.CategoryRepository;
 import ir.aliap1376ir.source.microservices.models.transfer.CategoryServiceGrpc;
 import ir.aliap1376ir.source.microservices.models.transfer.Models;
 import org.lognet.springboot.grpc.GRpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @GRpcService
@@ -14,10 +16,12 @@ public class CategoryServer extends CategoryServiceGrpc.CategoryServiceImplBase 
     @Autowired
     private CategoryRepository categoryRepository;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public void findById(Models.RequestParam request, StreamObserver<Models.Category> responseObserver) {
 
-        System.out.println(request.getId());
+        logger.info(request.getId()+"");
 
         Category categoryJson = categoryRepository.findById(request.getId());
 
