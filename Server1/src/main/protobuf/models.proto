@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_package = "ir.aliap1376ir.source.microservices.models.transfer";
+option java_multiple_files = false;
+
+service CategoryService {
+  rpc findById(RequestParam) returns (Category);
+}
+
+message RequestParam{
+  int64 id = 1;
+}
+
+message Category {
+  int64 id = 1;
+  string name = 2;
+}
+
+message Categories {
+  repeated Category array = 1;
+}
+
+message Book{
+  int64 id = 1;
+  string name = 2;
+  Category category =3;
+}
+
+message Books{
+  repeated Book array = 1;
+}
